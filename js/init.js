@@ -2,21 +2,21 @@ $(function(){
 	var
 		expand = function($el){
 			var
-				subs = $('[data-sub-rel = ' + $el.data('subKey') + ']', $el.parent());
+				scope = $el.parent(),
+				subs = $('[data-sub-rel = ' + $el.data('subKey') + ']', scope);
 			subs.each(function(i,el){
 				var
 					$el = $(el),
 					getDepth = function($el){
 						var
-							counter = 0,
-							parent =$('[data-sub-key = ' + $el.data('subRel') + ']', $el.parent());
+							counter = 0;
 						return (function(parent){
 							if(parent.length){
 								counter++;
-								return arguments.callee($('[data-sub-key = ' + parent.data('subRel') + ']', $el.parent()));
+								return arguments.callee($('[data-sub-key = ' + parent.data('subRel') + ']', scope));
 							}
 							return counter;
-						})(parent);
+						})($('[data-sub-key = ' + $el.data('subRel') + ']', scope));
 					},
 					level = getDepth($el);
 				$el.css({
@@ -35,7 +35,8 @@ $(function(){
 		},
 		collapse = function($el){
 			var
-				subs = $('[data-sub-rel = ' + $el.data('subKey') + ']', $el.parent());
+				scope = $el.parent(),
+				subs = $('[data-sub-rel = ' + $el.data('subKey') + ']', scope);
 			subs.each(function(i,el){
 				var
 					$el = $(el);
@@ -50,7 +51,8 @@ $(function(){
 			$el.data('expanded', false);
 		},
 		moveSubs = function($el){
-			subs = $('[data-sub-rel = ' + $el.data('subKey') + ']', $el.parent());
+			scope = $el.parent(),
+			subs = $('[data-sub-rel = ' + $el.data('subKey') + ']', scope);
 			$el.after(subs);
 			subs.each(function(i,sub){
 				var
@@ -90,7 +92,15 @@ $(function(){
 		onReplaceOrigin: function(el, p){
 			var
 				$prev = (function($prev){
-					return $prev.filter(':visible').length ? $prev : $prev.prev().length ? arguments.callee($prev.prev()) : [];
+					if($prev.length && !$prev.hasClass('v_hidden')){
+						return $prev;
+					}else{
+						if($prev.prev().length){
+							arguments.callee($prev.prev())
+						}else{
+							return [];
+						}
+					}
 				})($(el).prev()),
 				$el = $(el),
 				margin = 0;
