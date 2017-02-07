@@ -93,6 +93,9 @@ body{
 }
 .rightItem{
 	height:35px;
+	overflow:hidden;
+	border-width:1px;
+	transition: height 200ms, border-width 100ms;
 }
 .blackLeftBorder{
 	border-left:#000 solid 1px;
@@ -112,5 +115,6 @@ body{
 	left:-6px;
 }
 .v_hidden{
-	display:none;
+	height:0px;
+	border-width:0px;
 }

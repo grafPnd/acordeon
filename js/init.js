@@ -30,7 +30,7 @@ $(function(){
 					}
 				}
 			});
-			subs.show(200);
+			subs.removeClass('v_hidden');
 			$el.data('expanded', true);
 		},
 		collapse = function($el){
@@ -46,7 +46,7 @@ $(function(){
 					collapse($el);
 				}
 			});
-			subs.hide(200);
+			subs.addClass('v_hidden')
 			$el.data('expanded', false);
 		},
 		moveSubs = function($el){
