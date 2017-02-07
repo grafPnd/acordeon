@@ -96,7 +96,7 @@ $(function(){
 						return $prev;
 					}else{
 						if($prev.prev().length){
-							arguments.callee($prev.prev())
+							return arguments.callee($prev.prev())
 						}else{
 							return [];
 						}
