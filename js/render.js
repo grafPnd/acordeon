@@ -3,17 +3,16 @@ var
 		var
 			cont = $('#j_tree');
 		cont.empty();
-		(function(arr, id, p){
+		(function(arr, id){
 			var
 				i = 0,
-				l = arr.length,
-				m = p ? p  : 0;
+				l = arr.length;
 			for(i = 0; i < l; i++){
 				if(arr[i].children && arr[i].children.length){
-					cont.append($('<div ' + (m ? 'style = "margin-left: ' + m + 'px; margin-right:' + m + 'px;"' : '') + ' class = "j_toggler j_dragBlock s_pointer straightBox ' + (id ? 'v_hidden' : '') + ' rightRb rightItem" data-sub-key = "' + arr[i].id + '" ' + (id ? 'data-sub-rel = "' + id + '"' : '')  + ' >' + arr[i].name + '</div>'));
-					arguments.callee(arr[i].children, arr[i].id, m + 10);
+					cont.append($('<div class = "j_toggler j_dragBlock s_pointer straightBox ' + (id ? 'v_hidden' : '') + ' rightRb rightItem" data-sub-key = "' + arr[i].id + '" ' + (id ? 'data-sub-rel = "' + id + '"' : '')  + ' >' + arr[i].name + '</div>'));
+					arguments.callee(arr[i].children, arr[i].id);
 				}else{
-					cont.append($(' <div ' + (m ? 'style = "margin-left: ' + m + 'px; margin-right:' + m + 'px;"' : '') + ' class = "j_dragBlock straightBox ' + (id ? 'v_hidden' : '') + ' rightRb rightItem" data-sub-rel = "' + (id || arr[i].id) + '" >' + arr[i].name + '</div>'));
+					cont.append($(' <div class = "j_dragBlock straightBox ' + (id ? 'v_hidden' : '') + ' rightRb rightItem" data-sub-rel = "' + (id || arr[i].id) + '" >' + arr[i].name + '</div>'));
 				}
 			}
 		}(d));

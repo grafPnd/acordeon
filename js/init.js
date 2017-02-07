@@ -2,11 +2,27 @@ $(function(){
 	var
 		expand = function($el){
 			var
-				subs = $('[data-sub-rel = ' + $el.data('sub-key') + ']', $el.parent());
-				// childs = subs.find('.straightBox');
+				subs = $('[data-sub-rel = ' + $el.data('subKey') + ']', $el.parent());
 			subs.each(function(i,el){
 				var
-					$el = $(el);
+					$el = $(el),
+					getDepth = function($el){
+						var
+							counter = 0,
+							parent =$('[data-sub-key = ' + $el.data('subRel') + ']', $el.parent());
+						return (function(parent){
+							if(parent.length){
+								counter++;
+								return arguments.callee($('[data-sub-key = ' + parent.data('subRel') + ']', $el.parent()));
+							}
+							return counter;
+						})(parent);
+					},
+					level = getDepth($el);
+				$el.css({
+					marginLeft: level * 10 + 'px',
+					marginRight:level * 10 + 'px'
+				});
 				if($el.hasClass('j_toggler')){
 					if($el.data('defferedExpand')){
 						expand($el);
@@ -16,16 +32,10 @@ $(function(){
 			});
 			subs.show(200);
 			$el.data('expanded', true);
-			// subs.removeClass('v_hidden ');
-			// subs.prepend('<div class = "j_subs substree blackLeftBorder">');
-			// childs.each(function(i,el){
-			// subs.each(function(i,el){
-				// $(el).append('<div class = "j_hyphen hyphen">');
-			// });
 		},
 		collapse = function($el){
 			var
-				subs = $('[data-sub-rel = ' + $el.data('sub-key') + ']', $el.parent());
+				subs = $('[data-sub-rel = ' + $el.data('subKey') + ']', $el.parent());
 			subs.each(function(i,el){
 				var
 					$el = $(el);
@@ -37,9 +47,18 @@ $(function(){
 				}
 			});
 			subs.hide(200);
-			$el.data('expanded', false)
-			// subs.addClass('v_hidden ');
-			// subs.remove('.j_subs')
+			$el.data('expanded', false);
+		},
+		moveSubs = function($el){
+			subs = $('[data-sub-rel = ' + $el.data('subKey') + ']', $el.parent());
+			$el.after(subs);
+			subs.each(function(i,sub){
+				var
+					$sub = $(sub);
+				if($sub.data('subKey')){
+					moveSubs($sub);
+				}
+			});
 		};
 		render();
 	$('.j_toggler')
@@ -99,7 +118,6 @@ $(function(){
 					$el.css({marginLeft: '0px', marginRight: '0px'});
 				}
 				el.dragEl.style.width = (p.rootWidth - margin*2) + 'px';
-				//updMeta ()
 			}
 		},
 		onDragStart: function(el,p){
@@ -113,16 +131,13 @@ $(function(){
 				}
 				collapse($el);
 			}
-			// el.$dragEl.find('.j_hyphen').addClass('s_hidden');
 		},
 		onDragEnd: function(el,p){
 			var
-				$el = $(el),
-				subs = $('[data-sub-rel = ' + $el.data('sub-key') + ']', $el.parent());
+				$el = $(el);
+			moveSubs($el);
 			if($el.hasClass('j_toggler')){
-				$(el).after(subs);
 				if($el.data('defferedExpand')){
-					//adjust margins, that could be changed
 					expand($el);
 					$el.data('defferedExpand',false);
 				}

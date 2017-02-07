@@ -491,7 +491,7 @@
 							x: val.x,
 							y: val.y
 						},
-					delta = {//this delta should recalculate after rebuild
+					delta = {
 							x: val.x - (el.runtime.startX - (el.runtime.shiftX + p.lim.borderX / 2)),
 							y: val.y - (el.runtime.startY - (el.runtime.shiftY + p.lim.borderY / 2))
 						};
@@ -500,13 +500,11 @@
 							if (Math.abs(delta.x)  < p.align.sensitivity){
 								el.onHold = true;
 								result.x = p.lim.centerX - el.dragEl.clientWidth  / 2 - el.runtime.borderX / 2;
-								// el.runtime.startX = val.x + el.runtime.shiftX + p.lim.borderX / 2;
 							}else{
 								el.onHold = false;
 							}
 						}
 					}
-					//rebuild el.runtime.startY = val.y + el.runtime.shiftY + p.lim.borderY / 2;
 					return result;
 				},
 				tryMagnetic: function(val, p) {
