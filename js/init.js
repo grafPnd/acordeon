@@ -3,7 +3,7 @@ $(function(){
 		expand = function($el){
 			var
 				scope = $el.parent(),
-				subs = $('[data-sub-rel = ' + $el.data('subKey') + ']', scope);
+				subs = $('[data-sub-rel = ' + $el.attr('data-sub-key') + ']', scope);
 			subs.each(function(i,el){
 				var
 					$el = $(el),
@@ -13,10 +13,10 @@ $(function(){
 						return (function(parent){
 							if(parent.length){
 								counter++;
-								return arguments.callee($('[data-sub-key = ' + parent.data('subRel') + ']', scope));
+								return arguments.callee($('[data-sub-key = ' + parent.attr('data-sub-rel') + ']', scope));
 							}
 							return counter;
-						})($('[data-sub-key = ' + $el.data('subRel') + ']', scope));
+						})($('[data-sub-key = ' + $el.attr('data-sub-rel') + ']', scope));
 					},
 					level = getDepth($el);
 				$el.css({
@@ -36,7 +36,7 @@ $(function(){
 		collapse = function($el){
 			var
 				scope = $el.parent(),
-				subs = $('[data-sub-rel = ' + $el.data('subKey') + ']', scope);
+				subs = $('[data-sub-rel = ' + $el.attr('data-sub-key') + ']', scope);
 			subs.each(function(i,el){
 				var
 					$el = $(el);
@@ -52,12 +52,12 @@ $(function(){
 		},
 		moveSubs = function($el){
 			scope = $el.parent(),
-			subs = $('[data-sub-rel = ' + $el.data('subKey') + ']', scope);
+			subs = $('[data-sub-rel = ' + $el.attr('data-sub-key') + ']', scope);
 			$el.after(subs);
 			subs.each(function(i,sub){
 				var
 					$sub = $(sub);
-				if($sub.data('subKey')){
+				if($sub.attr('data-sub-key')){
 					moveSubs($sub);
 				}
 			});
@@ -110,11 +110,11 @@ $(function(){
 					if($prev.hasClass('j_toggler')){
 						if($prev.data('expanded')){//insert inside folder
 							margin = (parseInt($prev.css('marginLeft'), 10) || 0) + 10;
-							$el.data('data-sub-rel',$prev.attr('data-sub-key'));
+							$el.attr('data-sub-rel',$prev.attr('data-sub-key'));
 							$el.css({marginLeft: margin + 'px', marginRight: margin + 'px'});
 						}else{//insert after folder
 							margin = (parseInt($prev.css('marginLeft'), 10) || 0);
-							$el.attr('data-sub-rel',$prev.data('data-sub-rel'));
+							$el.attr('data-sub-rel',$prev.attr('data-sub-rel'));
 							$el.css({marginLeft: margin + 'px', marginRight: margin + 'px'});
 						}
 					}else{//commonElement
